@@ -29,6 +29,7 @@ function ChatLIstItem({isContactPage=false,data}) {
         // }
   }
 
+  console.log(data)
 
 
   return <div className={`flex  cursor-pointer items-center hover:bg-background-default-hover`} onClick={handleContactClick}>
@@ -78,7 +79,7 @@ function ChatLIstItem({isContactPage=false,data}) {
               }
               </span>
               {
-                data.totalUnreadMessaged>0 && <span className="bg-icon-green px-[5px] rounded-full text-sm">{data.totalUnreadMessaged}</span>
+                data.totalUnreadMessages>0 && <span className="bg-icon-green px-[5px] rounded-full text-sm">{data.totalUnreadMessages}</span>
               }
           </div>
         </div>
