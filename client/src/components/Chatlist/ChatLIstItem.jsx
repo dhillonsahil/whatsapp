@@ -29,7 +29,6 @@ function ChatLIstItem({isContactPage=false,data}) {
         // }
   }
 
-  console.log(data)
 
 
   return <div className={`flex  cursor-pointer items-center hover:bg-background-default-hover`} onClick={handleContactClick}>

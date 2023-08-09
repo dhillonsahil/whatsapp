@@ -1,7 +1,7 @@
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
 import { GET_ALL_CONTACTS } from "@/utils/ApiRoutes";
-import axios from "axios";
+import axios, { all } from "axios";
 import React, { useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import {BiSearchAlt2} from 'react-icons/bi'
@@ -9,9 +9,23 @@ import ChatLIstItem from "./ChatLIstItem";
 
 
 function ContactsList() {
-
+  const [searchTerm,setSearchTerm]=useState("")
+  const [searchContacts,setSearchContacts]=useState([])
+  const [allContacts,setAllContacts]=useState([])
   const [{},dispatch]=useStateProvider()
-  const [allContacts,setAllContacts]=useState()
+
+  useEffect(()=>{
+    if(searchTerm.length){
+      const filteredData={};
+      Object.keys(allContacts).forEach((key)=>{
+        filteredData[key]=allContacts[key].filter((obj)=>obj.name.toLowerCase().includes(searchTerm.toLowerCase()));
+      })
+      setSearchContacts(filteredData)
+    }else{
+      setSearchContacts(allContacts)
+    }
+  },[searchTerm])
+
 
   useEffect(()=>{
     const getContacts = async()=>{
@@ -20,6 +34,7 @@ function ContactsList() {
           data:{users},
         }= await axios.get(GET_ALL_CONTACTS);
         setAllContacts(users)
+        setSearchContacts(users)
       } catch (error) {
         console.log(error)
       }
@@ -43,20 +58,22 @@ function ContactsList() {
       <BiSearchAlt2 className="text-panel-header-icon cursor-pointer text-l" />
     </div>
     <div>
-      <input type="text" className="bg-transparent text-sm focus:outline-none text-white w-full" name="search" placeholder="Search Contacts"  />
+      <input type="text" className="bg-transparent text-sm focus:outline-none text-white w-full" name="search" placeholder="Search Contacts" value={searchTerm} onChange={e=>setSearchTerm(e.target.value.trim())} />
     </div>
     </div>
     </div>
-    { allContacts &&
-      Object.entries(allContacts).map(([initialLetter,userList])=>{
-        return (<div key={Date.now()+initialLetter}>
-          <div className="text-teal-light pl-10 py-5">{initialLetter}</div>
+    { 
+      Object.entries(searchContacts).map(([initialLetter,userList])=>{
+
+       return ( userList.length>0 &&
+       (<div key={Date.now()+initialLetter}>
+         { userList.length && <div className="text-teal-light pl-10 py-5">{initialLetter}</div>}
           {
             userList.map(contact=>{
               return (<ChatLIstItem data={contact} isContactPage={true} key={contact.id} />)
             })
           }
-        </div>)
+        </div>))
       })
     }
     </div>

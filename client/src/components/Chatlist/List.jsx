@@ -14,8 +14,7 @@ function List() {
         const {data:{users,onlineUsers}}=await axios(`${GET_INITIAL_CONTACTS_ROUTE}/${userInfo.id}`);
         dispatch({type:reducerCases.SET_ONLINE_USERS,onlineUsers})
         dispatch({type:reducerCases.SET_USER_CONTACTS,userContacts:users})
-        console.log(users)
-      } catch (error) {
+              } catch (error) {
         console.log(error,userInfo)
       }
     }
