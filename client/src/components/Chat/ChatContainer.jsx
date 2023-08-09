@@ -16,11 +16,11 @@ function ChatContainer() {
     <div className="flex w-full z-20">
         <div className="flex flex-col m-3 justify-end w-full gap-1 overflow-auto">
           {messages.map((message,index)=>{
-            return (
+            return ( (message.senderId===userInfo.id || message.senderId===currentChatUser.id) &&
             <div key={message.id} className={`flex ${message.senderId===currentChatUser.id?"justify-start":"justify-end"}`} >
               {message.type==="text" && (
                 <div className={`text-white px-2 py-[5px] text-sm rounded-lg flex gap-2 items-end max-w-[45%] ${message.senderId===currentChatUser.id?"bg-incoming-background":"bg-outgoing-background"}`}>
-                  <span className="break-all">{message.message} </span>
+                  <span className="break-all">{ (message.senderId===userInfo.id || message.senderId===currentChatUser.id) &&  message.message} </span>
                   <div className="flex gap-1 items-end">
                     <span className="text-bubble-meta text-[11px] pt-1 min-w-fit">
                       {calculateTime(message.createdAt)}

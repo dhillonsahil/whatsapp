@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "../common/Avatar";
 import { useStateProvider } from "@/context/StateContext";
 import { reducerCases } from "@/context/constants";
@@ -9,6 +9,7 @@ import { FaCamera, FaMicrophone } from "react-icons/fa";
 function ChatLIstItem({isContactPage=false,data}) {
 
   const [{userInfo,currentChatUser},dispatch]=useStateProvider()
+  const [read,setRead]=useState(false)
   const handleContactClick = ()=>{
     // if(currentChatUser?.id===data.id){
       if(!isContactPage){
@@ -22,6 +23,7 @@ function ChatLIstItem({isContactPage=false,data}) {
             id:userInfo.id===data.senderId?data.receiverId:data.senderId,
           }
         })
+        setRead(true)
       }else{
         dispatch({type:reducerCases.CHANGE_CURRENT_CHAT_USER,user:{...data}})
         dispatch({type:reducerCases.SET_ALL_CONTACTS_PAGE})
@@ -29,6 +31,12 @@ function ChatLIstItem({isContactPage=false,data}) {
         // }
   }
 
+
+  useEffect(()=>{
+    if(read){
+      data.totalUnreadMessaged=0
+    }
+  },[data])
 
 
   return <div className={`flex  cursor-pointer items-center hover:bg-background-default-hover`} onClick={handleContactClick}>
@@ -78,7 +86,7 @@ function ChatLIstItem({isContactPage=false,data}) {
               }
               </span>
               {
-                data.totalUnreadMessages>0 && <span className="bg-icon-green px-[5px] rounded-full text-sm">{data.totalUnreadMessages}</span>
+                data.totalUnreadMessages>0 && read==false && <span className="bg-icon-green px-[5px] rounded-full text-sm">{data.totalUnreadMessages}</span>
               }
           </div>
         </div>
