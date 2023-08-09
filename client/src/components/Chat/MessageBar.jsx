@@ -175,7 +175,7 @@ function MessageBar() {
         )}
       {grabPhoto && <PhotoPicker onChange={PhotoPickerChange} />}
       {
-        showAudioRecorder && <CaptureAudio onChange = {setShowAudioRecorder} />
+        showAudioRecorder && <CaptureAudio  setShowAudioRecorder = {setShowAudioRecorder} />
       }
     </div>
   );
